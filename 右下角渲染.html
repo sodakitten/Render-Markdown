@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown渲染书签一键生成</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        button {
+            background-color: #4285f4;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+            transition: background-color 0.2s;
+        }
+        button:hover { background-color: #3367d6; }
+        .tutorial-links { margin-top: 20px; }
+        .tutorial-links a {
+            display: block;
+            margin: 10px 0;
+            color: #4285f4;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Markdown渲染书签工具</h1>
+    
+    <button id="copyButton">📋 一键复制书签代码</button>
+    
+    <div class="tutorial-links">
+        <h3>浏览器添加教程：</h3>
+        <a href="https://mcnggbg3enah.feishu.cn/file/RiXhbMBtkoSXnLxydfscFe31nCc?from=from_copylink" target="_blank">Edge浏览器添加教程 →</a>
+        <a href="https://mcnggbg3enah.feishu.cn/file/M0WSbOLhfozmf9xZkWicg7Q9nsk?from=from_copylink" target="_blank">Chrome浏览器添加教程 →</a>
+    </div>
+
+    <script>
+        // 使用十六进制编码的字符串拼接方式
+        const parts = [
+            "javascript:(function(){const d=document,p=()=>{const s=window.getSelection().toString().trim();if(!s)return v.style.display=\"none\";Promise.all([[",
+            "\"script\",\"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.4/katex.min.js\"],[\"link\",\"https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.4/katex.min.css\"],[\"script\",\"https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js\"]].map(([t,u])=>new Promise((r,j)=>{let e=t===",
+            "\"script\"?d.createElement(\"script\"):d.createElement(\"link\");if(t===\"link\"){e.rel=\"stylesheet\";e.href=u}else{e.src=u}e.onload=r;e.onerror=j;(t===\"script\"?d.body:d.head).appendChild(e);}))).then(()=>{let t=s.replace(/&lt;/g,\"<\").replace(/&gt;/g,\">\");let su=t.match(/[\\u00B2\\u00B3\\u2070\\u2074-\\u2079]/g)||[],sb=t.match(/[\\u2080-\\u2089]/g)||[],dc=t.match(/\\u2103/g)||[];let all=Array.from(new Set(su.concat(sb).concat(dc)));let errText=\"\";if(all.length){let hints=all.map(ch=>{if(/\\u2103/.test(ch))return ch+\"→$^\\\\circ$C\";if(/[\\u2080-\\u2089]/.test(ch))return ch+\"→$x_0$\";return ch+\"→$x^2$\";}).join(\" \");errText='<div style=\"color:red;font-weight:bold;margin-bottom:10px;\">⚠ 检测到非法字符：'+all.join(\" \")+'，建议改用 LaTeX 格式：'+hints+'</div>';}let o=t.replace(/\\$\\$(.*?)\\$\\$/gs,(_,f)=>{try{return'<div style=\"margin:5px 0;\">'+katex.renderToString(f,{displayMode:true,throwOnError:false})+'</div>'}catch(e){return\"[错误的公式: \"+f+\"]\"}}).replace(/(?<!\\\\)\\$(.*?)(?<!\\\\)\\$/gs,(_,f)=>{try{return katex.renderToString(f,{throwOnError:false})}catch(e){return\"[错误的公式: \"+f+\"]\"}});v.innerHTML=errText+\"<strong>处理后的文本:</strong><br>\"+marked.parse(o);v.style.display=\"block\";}).catch(e=>console.error(\"加载失败:\",e));};let v=d.getElementById(\"_mdkatex_preview\");if(!v){v=d.createElement(\"div\");v.id=\"_mdkatex_preview\";Object.assign(v.style,{position:\"fixed\",bottom:\"20px\",right:\"20px\",width:\"450px\",maxHeight:\"600px\",overflowY:\"auto\",background:\"white\",border:\"1px solid black\",boxShadow:\"0 4px 8px rgba(0,0,0,0.2)\",padding:\"15px\",borderRadius:\"8px\",fontSize:\"1.2em\",display:\"none\",zIndex:\"9999\"});d.body.appendChild(v);}d.addEventListener(\"mouseup\",p);d.addEventListener(\"click\",e=>{if(!v.contains(e.target))v.style.display=\"none\";});})();"
+        ];
+
+        document.getElementById('copyButton').addEventListener('click', function() {
+            // 创建隐藏的textarea来复制文本
+            const textarea = document.createElement('textarea');
+            textarea.value = parts.join('');
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            
+            try {
+                document.execCommand('copy');
+                this.textContent = '✓ 复制成功！';
+            } catch (err) {
+                console.error('复制失败:', err);
+                this.textContent = '✗ 复制失败';
+            } finally {
+                document.body.removeChild(textarea);
+                setTimeout(() => this.textContent = '📋 一键复制书签代码', 2000);
+            }
+        });
+    </script>
+</body>
+</html>
